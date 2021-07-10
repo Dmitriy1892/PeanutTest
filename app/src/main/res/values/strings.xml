@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">PeanutTest</string>
+    <string name="currency">Currency:</string>
+    <string name="current_trades_volume">Current trades volume:</string>
+    <string name="current_trades_count">Current trades count:</string>
+    <string name="equity">Equity:</string>
+    <string name="free_margin">Free margin:</string>
+    <string name="open_trades_status">Open trades status:</string>
+    <string name="swap_status">Swap status:</string>
+    <string name="leverage">Leverage:</string>
+    <string name="total_trades_count">Total trades count:</string>
+    <string name="total_trades_volume">Total trades volume</string>
+    <string name="type">Type:</string>
+    <string name="verification_level">Verification level:</string>
+    <string name="zip_code">Zip code:</string>
+    <string name="balance">Balance:</string>
+    <string name="user_icon_description">User icon</string>
+    <string name="price">Price:</string>
+    <string name="tp">Tp:</string>
+    <string name="sl">Sl:</string>
+    <string name="period">Period:</string>
+    <string name="trading_system">Trading system:</string>
+    <string name="cmd">Cmd:</string>
+    <string name="pair">Pair:</string>
+    <string name="account_info">Account info</string>
+    <string name="quotes_info">Quotes info</string>
+    <string name="logout">Logout</string>
+</resources>

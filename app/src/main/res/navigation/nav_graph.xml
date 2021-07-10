@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signInFragment">
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.coldfier.peanuttest.signinfragment.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/sign_in_fragment">
+        <action
+            android:id="@+id/action_signInFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.coldfier.peanuttest.userfragment.UserFragment"
+        android:label="UserFragment"
+        tools:layout="@layout/user_fragment">
+        <argument
+            android:name="userInfo"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_userFragment_to_quotesFragment"
+            app:destination="@id/quotesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quotesFragment"
+        android:name="com.coldfier.peanuttest.quotesfragment.QuotesFragment"
+        android:label="QuotesFragment"
+        tools:layout="@layout/quotes_fragment">
+        <argument
+            android:name="userInfo"
+            app:argType="string" />
+    </fragment>
+</navigation>
