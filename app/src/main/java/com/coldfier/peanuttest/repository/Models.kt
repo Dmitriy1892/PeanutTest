@@ -26,7 +26,9 @@ data class AuthResponse(
 @JsonClass(generateAdapter = true)
 data class UserData(
 
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
+
     @Json(name = "login")
     val login: Int,
 

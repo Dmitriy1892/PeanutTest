@@ -1,76 +1,83 @@
 package com.coldfier.peanuttest.quotesfragment
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import android.content.Context
+import android.os.SystemClock
+import android.provider.Settings
+import androidx.lifecycle.*
+import com.coldfier.peanuttest.repository.AppRepository
 import com.coldfier.peanuttest.repository.QuoteInfoItem
 import com.coldfier.peanuttest.repository.UserData
-import com.coldfier.peanuttest.repository.retrofit.ApiClient
 import com.google.android.material.chip.Chip
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import java.lang.Exception
 
-class QuotesViewModel(json: String) : ViewModel() {
+class QuotesViewModel(private val app: Application) : AndroidViewModel(app) {
+
+    private var _userData = MutableLiveData<UserData>()
+    val userData: LiveData<UserData>
+        get() = _userData
 
     private var _quotesList = MutableLiveData<List<QuoteInfoItem>>()
     val quotesList: LiveData<List<QuoteInfoItem>>
         get() = _quotesList
 
-    var startDateTime = MutableLiveData(System.currentTimeMillis())
+    var startDateTime = MutableLiveData(System.currentTimeMillis() - System.currentTimeMillis() % 86400000)
     var endDateTime = MutableLiveData(System.currentTimeMillis())
 
     private var checkedChips = mutableListOf<String>()
+
     private var _pairs = MutableLiveData("")
     val pairs: LiveData<String>
         get() = _pairs
 
-    private var _userData: UserData
+    private var _toastCatcher = MutableLiveData(false)
+    val toastCatcher: LiveData<Boolean>
+        get() = _toastCatcher
 
     init {
-        _userData = initUser(json)
+        initUser(app.applicationContext)
     }
 
-    private fun initUser(json: String): UserData {
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val jsonAdapter = moshi.adapter(UserData::class.java)
-        val userData = jsonAdapter.fromJson(json)
-
-        return userData!!
+    private fun initUser(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val repo = AppRepository.getInstance(context)
+            _userData.postValue(repo.getAccount())
+        }
     }
 
     fun getQuoteList(
-        login: Int = _userData.login,
+        userData: UserData = _userData.value ?: UserData(login = 0, password = ""),
         pairs: String = _pairs.value ?: "",
         from: Int = startDateTime.value?.div(1000)!!.toInt(),
         to: Int = endDateTime.value?.div(1000)!!.toInt(),
-        token: String = _userData.partnerToken
+        context: Context = app.applicationContext
     ) {
+        val userData1 = userData
         viewModelScope.launch(Dispatchers.IO) {
-            val apiService = ApiClient.getPartnerApiService()
-            apiService
-                .getQuotes(login = login, pairs = pairs, from = from, to = to, token = token)
-                .enqueue(object : Callback<List<QuoteInfoItem>> {
-                    override fun onResponse(
-                        call: Call<List<QuoteInfoItem>>,
-                        response: Response<List<QuoteInfoItem>>
-                    ) {
-                        if (response.isSuccessful) {
-                            _quotesList.postValue(response.body())
-                        } else {
-                            //TODO("Update token")
-                        }
-                    }
+            val repository = AppRepository.getInstance(context)
 
-                    override fun onFailure(call: Call<List<QuoteInfoItem>>, t: Throwable) {
-                        //TODO("Toast about failed connection")
+            try {
+                val listResponse = repository
+                    .getQuotesList(login = userData.login, pairs = pairs, from = from, to = to, token = userData.partnerToken)
+                _quotesList.postValue(listResponse)
+            } catch (e: Exception) {
+                try {
+                    if (repository.updateAccount(userData)) {
+                        val listResponse = repository
+                            .getQuotesList(login = userData.login, pairs = pairs, from = from, to = to, token = userData.partnerToken)
+                        _quotesList.postValue(listResponse)
+                        _userData.postValue(repository.getAccount())
+                    } else {
+                        _toastCatcher.postValue(true)
                     }
-                })
+                } catch (e: Exception) {
+                    _toastCatcher.postValue(true)
+                }
+            }
         }
     }
 
@@ -94,7 +101,7 @@ class QuotesViewModel(json: String) : ViewModel() {
         checkedChips.clear()
     }
 
-    fun updatePairs() {
+    private fun updatePairs() {
         viewModelScope.launch {
             var pairsBuffer = ""
             checkedChips.forEachIndexed { index, s ->
