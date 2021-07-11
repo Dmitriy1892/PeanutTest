@@ -51,8 +51,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     fun setMenusVisible() {
         binding.toolbar.menu.findItem(R.id.logout).isVisible = true
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
+
 }
