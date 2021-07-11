@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.coldfier.peanuttest.databinding.SignInFragmentBinding
 import com.coldfier.peanuttest.repository.UserData
+import kotlin.math.log
 
 class SignInFragment : Fragment() {
 
@@ -28,7 +29,8 @@ class SignInFragment : Fragment() {
                 if (loginEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()) {
                     viewModel.signIn(
                         loginEditText.text.toString().toInt(),
-                        passwordEditText.text.toString()
+                        passwordEditText.text.toString(),
+                        requireContext()
                     )
                 }
             }
@@ -40,32 +42,9 @@ class SignInFragment : Fragment() {
             }
         }
 
-        viewModel.partnerAuthToken.observe(viewLifecycleOwner) {
-            if (it != null && viewModel.peanutAuthToken.value?.isNotEmpty() == true) {
-                val userInfo = viewModel.serializeToJson(
-                    UserData(
-                        viewModel.getUserLoginAndPassword().login,
-                        viewModel.getUserLoginAndPassword().password,
-                        viewModel.peanutAuthToken.value!!,
-                        it
-                    )
-                )
-                val action = SignInFragmentDirections.actionSignInFragmentToUserFragment(userInfo)
-                findNavController().navigate(action)
-            }
-        }
-
-        viewModel.peanutAuthToken.observe(viewLifecycleOwner) {
-            if (it != null && viewModel.partnerAuthToken.value?.isNotEmpty() == true) {
-                val userInfo = viewModel.serializeToJson(
-                    UserData(
-                        viewModel.getUserLoginAndPassword().login,
-                        viewModel.getUserLoginAndPassword().password,
-                        it,
-                        viewModel.partnerAuthToken.value!!
-                    )
-                )
-                val action = SignInFragmentDirections.actionSignInFragmentToUserFragment(userInfo)
+        viewModel.authorizationState.observe(viewLifecycleOwner) {
+            if (it) {
+                val action = SignInFragmentDirections.actionSignInFragmentToUserFragment()
                 findNavController().navigate(action)
             }
         }

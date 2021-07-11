@@ -18,14 +18,7 @@
         android:id="@+id/userFragment"
         android:name="com.coldfier.peanuttest.userfragment.UserFragment"
         android:label="UserFragment"
-        tools:layout="@layout/user_fragment">
-        <argument
-            android:name="userInfo"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_userFragment_to_quotesFragment"
-            app:destination="@id/quotesFragment" />
-    </fragment>
+        tools:layout="@layout/user_fragment"/>
     <fragment
         android:id="@+id/quotesFragment"
         android:name="com.coldfier.peanuttest.quotesfragment.QuotesFragment"

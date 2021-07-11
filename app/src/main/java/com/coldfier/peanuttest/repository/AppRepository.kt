@@ -1,16 +1,8 @@
 package com.coldfier.peanuttest.repository
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import com.coldfier.peanuttest.repository.retrofit.ApiClient
 import com.coldfier.peanuttest.repository.room.AccountDatabase
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.runBlocking
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.IllegalArgumentException
 
 class AppRepository private constructor(context: Context) {
 
@@ -20,11 +12,12 @@ class AppRepository private constructor(context: Context) {
         val peanutToken = authorizeInPeanut(login, password)
         val partnerToken = authorizeInPartner(login, password)
         val userData = UserData(
-            login,
-            password,
-            peanutToken,
-            partnerToken
+            login = login,
+            password = password,
+            peanutToken = peanutToken,
+            partnerToken = partnerToken
         )
+        roomDao.deleteAccount()
         roomDao.saveAccount(userData)
         return true
     }
@@ -34,26 +27,23 @@ class AppRepository private constructor(context: Context) {
     }
 
     suspend fun getAccount(): UserData? {
-        val account = roomDao.getAccount()
-        return if (account != null) {
-            updateAccount(account)
-            roomDao.getAccount()
-        } else null
+        return roomDao.getAccount()
+
     }
 
     suspend fun deleteAccount() {
         roomDao.deleteAccount()
     }
 
-    private suspend fun updateAccount(userData: UserData): Boolean {
+    suspend fun updateAccount(userData: UserData): Boolean {
         return try {
             val peanutToken = authorizeInPeanut(userData.login, userData.password)
             val partnerToken = authorizeInPartner(userData.login, userData.password)
             val updatedUserData = UserData(
-                userData.login,
-                userData.password,
-                peanutToken,
-                partnerToken
+                login = userData.login,
+                password = userData.password,
+                peanutToken = peanutToken,
+                partnerToken = partnerToken
             )
             roomDao.updateAccount(updatedUserData)
             true
@@ -63,65 +53,55 @@ class AppRepository private constructor(context: Context) {
         }
     }
 
-    private fun authorizeInPeanut(login: Int, password: String): String {
+    fun getAccountInfo(userData: UserData): AccountInformation? {
+        val apiService = ApiClient.getPeanutApiService()
+        val peanutUserWithToken = PeanutUserWithToken(userData.login, userData.peanutToken)
+        val res = apiService.getAccountInformation(peanutUserWithToken).execute()
+        val response = res.body() as AccountInformation
 
-        var result: String? = null
-        var failMessage = ""
+        return response!!
+    }
 
+    fun getAccountPhoneNumber(userData: UserData): String? {
+        val apiService = ApiClient.getPeanutApiService()
+        val peanutUserWithToken = PeanutUserWithToken(userData.login, userData.peanutToken)
+        val res = apiService.getLastFourNumbersPhone(peanutUserWithToken).execute()
+        val response = res.body()?.string()
+
+        return response!!
+    }
+
+    fun getQuotesList(login: Int,
+                      pairs: String,
+                      from: Int,
+                      to: Int,
+                      token: String
+    ): List<QuoteInfoItem> {
+        val apiService = ApiClient.getPartnerApiService()
+        val res = apiService
+            .getQuotes(login = login, pairs = pairs, from = from, to = to, token = token)
+            .execute()
+        val body = res.body() as  List<QuoteInfoItem>
+
+        return body!!
+    }
+
+    private fun authorizeInPeanut(login: Int, password: String): String{
         val peanutApiService = ApiClient.getPeanutApiService()
-        peanutApiService.authorize(AuthRequest(login, password)).enqueue(object :
-            Callback<AuthResponse> {
-            override fun onResponse(
-                call: Call<AuthResponse>,
-                response: Response<AuthResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val authResponse = response.body() as AuthResponse
-                    if (authResponse.result) {
-                        result = authResponse.token
-                    } else {
-                        failMessage = "Sign-in error, please check the login or password"
-                    }
-                } else {
-                    failMessage = "Sign-in error, please check the login or password"
-                }
-            }
-            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                failMessage = "Sign-in error, please check the internet connection"
-            }
-        })
-        if (result != null) {
-            return result!!
-        } else throw IllegalArgumentException(failMessage)
+        val res = peanutApiService.authorize(AuthRequest(login, password)).execute()
+        val response = res.body() as AuthResponse
+        val result = response.token
+        return result
     }
 
     private fun authorizeInPartner(login: Int, password: String): String {
 
-        var result: String? = null
-        var failMessage = ""
-
         val partnerApiService = ApiClient.getPartnerApiService()
-        partnerApiService.authorize(AuthRequest(login, password)).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(
-                call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-                if (response.isSuccessful) {
-                    val token = response.body()?.string()
-                    val tok = token?.lastIndex?.let { token.substring(1, it) }
-                    result = tok
-                } else {
-                    failMessage = "Sign-in error, please check the login or password"
-                }
-            }
+        val res = partnerApiService.authorize(AuthRequest(login, password)).execute()
+        val response = res.body()?.string()
+        val token = response?.lastIndex?.let { response.substring(1, it) }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                failMessage = "Sign-in error, please check the internet connection"
-            }
-        })
-        if (result != null) {
-            return result!!
-        } else throw IllegalArgumentException(failMessage)
+        return token!!
     }
 
     companion object {

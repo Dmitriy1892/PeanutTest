@@ -1,16 +1,17 @@
 package com.coldfier.peanuttest.quotesfragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.coldfier.peanuttest.databinding.QuotesFragmentBinding
-import com.coldfier.peanuttest.userfragment.UserFragmentArgs
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -22,20 +23,17 @@ class QuotesFragment : Fragment() {
 
     private lateinit var viewModel: QuotesViewModel
     private lateinit var binding: QuotesFragmentBinding
-    private lateinit var json:String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        json = UserFragmentArgs.fromBundle(requireArguments()).userInfo
-    }
-
+    @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = QuotesFragmentBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this, QuotesViewModelFactory(json)).get(QuotesViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            QuotesViewModelFactory(requireActivity().application)
+        ).get(QuotesViewModel::class.java)
 
         val quotesRVAdapter = QuotesRVAdapter()
         binding.quotesRecyclerView.apply {
@@ -45,6 +43,41 @@ class QuotesFragment : Fragment() {
                 LinearLayoutManager.VERTICAL,
                 false
             )
+        }
+
+        viewModel.toastCatcher.observe(viewLifecycleOwner) {
+            if (it) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please check the internet connection",
+                    Toast.LENGTH_SHORT
+                ).show()
+                //TODO: Show the repeat button for getting an account data
+            }
+        }
+
+        viewModel.userData.observe(viewLifecycleOwner) {
+            viewModel.getQuoteList()
+        }
+
+        viewModel.pairs.observe(viewLifecycleOwner) {
+            if (viewModel.quotesList.value != null) viewModel.getQuoteList()
+        }
+
+        viewModel.startDateTime.observe(viewLifecycleOwner) {
+            if (viewModel.quotesList.value != null)viewModel.getQuoteList()
+            binding.startDateTimeButton.text =
+                SimpleDateFormat("dd-MM-yyyy 'at' HH:mm:ss").format(Date(it))
+        }
+
+        viewModel.endDateTime.observe(viewLifecycleOwner) {
+            if (viewModel.quotesList.value != null)viewModel.getQuoteList()
+            binding.endDateTimeButton.text =
+                SimpleDateFormat("dd-MM-yyyy 'at' HH:mm:ss").format(Date(it))
+        }
+
+        viewModel.quotesList.observe(viewLifecycleOwner) {
+            quotesRVAdapter.submitList(it)
         }
 
         //this need to prevent duplicated saving of pairs when the user rotated the screen
@@ -60,30 +93,14 @@ class QuotesFragment : Fragment() {
                 }
                 viewModel.getQuoteList()
                 //adding listener to chip
-                chip.setOnCheckedChangeListener { chip, isChecked ->
+                chip.setOnCheckedChangeListener { chip1, isChecked ->
                     if (isChecked) {
-                        viewModel.addCheckedChip(chip as Chip)
+                        viewModel.addCheckedChip(chip1 as Chip)
                     } else {
-                        viewModel.deleteUncheckedChip(chip as Chip)
+                        viewModel.deleteUncheckedChip(chip1 as Chip)
                     }
                 }
             }
-        }
-
-        viewModel.pairs.observe(viewLifecycleOwner) {
-            viewModel.getQuoteList()
-        }
-
-        viewModel.startDateTime.observe(viewLifecycleOwner) {
-            viewModel.getQuoteList()
-            binding.startDateTimeButton.text =
-                SimpleDateFormat("dd-MM-yyyy 'at' HH:mm:ss").format(Date(it))
-        }
-
-        viewModel.endDateTime.observe(viewLifecycleOwner) {
-            viewModel.getQuoteList()
-            binding.endDateTimeButton.text =
-                SimpleDateFormat("dd-MM-yyyy 'at' HH:mm:ss").format(Date(it))
         }
 
         binding.startDateTimeButton.setOnClickListener {
@@ -97,11 +114,6 @@ class QuotesFragment : Fragment() {
                 timePicker(viewModel.endDateTime)
             }
         }
-
-        viewModel.quotesList.observe(viewLifecycleOwner) {
-            quotesRVAdapter.submitList(it)
-        }
-
 
         return binding.root
     }

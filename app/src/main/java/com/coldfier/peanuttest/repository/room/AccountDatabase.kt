@@ -12,7 +12,6 @@ abstract class AccountDatabase: RoomDatabase() {
     abstract fun accountDao(): AccountDao
 
     companion object {
-
         @Volatile
         private var INSTANCE: AccountDatabase? = null
 

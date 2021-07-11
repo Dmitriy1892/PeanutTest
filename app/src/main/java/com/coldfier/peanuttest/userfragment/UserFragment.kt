@@ -6,29 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import com.coldfier.peanuttest.R
+import com.coldfier.peanuttest.MainActivity
 import com.coldfier.peanuttest.databinding.UserFragmentBinding
 
 class UserFragment : Fragment() {
 
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: UserFragmentBinding
-    private lateinit var json: String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        json = UserFragmentArgs.fromBundle(requireArguments()).userInfo
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = UserFragmentBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this, UserViewModelFactory(json)).get(UserViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            UserViewModelFactory(requireActivity().application)
+        ).get(UserViewModel::class.java)
 
         viewModel.accountInformation.observe(viewLifecycleOwner) {
             binding.accountInformation = it
@@ -38,10 +34,25 @@ class UserFragment : Fragment() {
             binding.phoneNumber = it
         }
 
-        binding.quotesButton.setOnClickListener {
-            val action = UserFragmentDirections.actionUserFragmentToQuotesFragment(json)
-            findNavController().navigate(action)
+        viewModel.userData.observe(viewLifecycleOwner) {
+            if (it != null) {
+                viewModel.getAccountInformation(it, requireContext())
+            }
         }
+
+        viewModel.toastCatcher.observe(viewLifecycleOwner) {
+            if (it) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please check the internet connection",
+                    Toast.LENGTH_SHORT
+                ).show()
+                //TODO: Show the repeat button for getting an account data
+            }
+        }
+
+        //set visible the toolbar logout icon and the bottom navigation menu
+        (requireActivity() as MainActivity).setMenusVisible()
 
         return binding.root
     }
