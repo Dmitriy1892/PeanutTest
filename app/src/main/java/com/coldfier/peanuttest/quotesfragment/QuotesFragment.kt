@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.coldfier.peanuttest.MainActivity
 import com.coldfier.peanuttest.databinding.QuotesFragmentBinding
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -91,7 +92,7 @@ class QuotesFragment : Fragment() {
                 if (chip.isChecked) {
                     viewModel.addCheckedChip(chip)
                 }
-                viewModel.getQuoteList()
+                if (!viewModel.quotesList.value.isNullOrEmpty()) viewModel.getQuoteList()
                 //adding listener to chip
                 chip.setOnCheckedChangeListener { chip1, isChecked ->
                     if (isChecked) {
@@ -114,6 +115,9 @@ class QuotesFragment : Fragment() {
                 timePicker(viewModel.endDateTime)
             }
         }
+
+        //set visible the toolbar logout icon and the bottom navigation menu
+        (requireActivity() as MainActivity).setMenusVisible()
 
         return binding.root
     }

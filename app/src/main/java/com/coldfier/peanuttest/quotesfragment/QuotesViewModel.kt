@@ -2,6 +2,8 @@ package com.coldfier.peanuttest.quotesfragment
 
 import android.app.Application
 import android.content.Context
+import android.os.SystemClock
+import android.provider.Settings
 import androidx.lifecycle.*
 import com.coldfier.peanuttest.repository.AppRepository
 import com.coldfier.peanuttest.repository.QuoteInfoItem
@@ -9,6 +11,8 @@ import com.coldfier.peanuttest.repository.UserData
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.lang.Exception
 
 class QuotesViewModel(private val app: Application) : AndroidViewModel(app) {
@@ -21,7 +25,7 @@ class QuotesViewModel(private val app: Application) : AndroidViewModel(app) {
     val quotesList: LiveData<List<QuoteInfoItem>>
         get() = _quotesList
 
-    var startDateTime = MutableLiveData(System.currentTimeMillis())
+    var startDateTime = MutableLiveData(System.currentTimeMillis() - System.currentTimeMillis() % 86400000)
     var endDateTime = MutableLiveData(System.currentTimeMillis())
 
     private var checkedChips = mutableListOf<String>()
@@ -52,6 +56,7 @@ class QuotesViewModel(private val app: Application) : AndroidViewModel(app) {
         to: Int = endDateTime.value?.div(1000)!!.toInt(),
         context: Context = app.applicationContext
     ) {
+        val userData1 = userData
         viewModelScope.launch(Dispatchers.IO) {
             val repository = AppRepository.getInstance(context)
 

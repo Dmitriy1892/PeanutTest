@@ -11,6 +11,9 @@ import com.coldfier.peanuttest.repository.AppRepository
 import com.coldfier.peanuttest.repository.UserData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -37,7 +40,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private fun initUser(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val repo = AppRepository.getInstance(context)
-            _userData.postValue(repo.getAccount())
+            var acc: UserData? = null
+            Mutex().withLock(acc) {
+                acc = repo.getAccount()
+            }
+            _userData.postValue(acc!!)
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.coldfier.peanuttest.databinding.SignInFragmentBinding
 import com.coldfier.peanuttest.repository.UserData
@@ -14,15 +15,21 @@ import kotlin.math.log
 
 class SignInFragment : Fragment() {
 
-    private lateinit var viewModel: SignInViewModel
+    private val viewModel: SignInViewModel by viewModels()
     private lateinit var binding: SignInFragmentBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.getAccount(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = SignInFragmentBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
+        //viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
 
         binding.signInButton.setOnClickListener {
             binding.apply {

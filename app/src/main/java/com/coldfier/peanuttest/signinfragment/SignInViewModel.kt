@@ -31,4 +31,12 @@ class SignInViewModel : ViewModel() {
                 }
         }
     }
+
+    fun getAccount(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val repository = AppRepository.getInstance(context)
+            val account = repository.getAccount() ?: return@launch
+            _authorizationState.postValue(true)
+        }
+    }
 }
