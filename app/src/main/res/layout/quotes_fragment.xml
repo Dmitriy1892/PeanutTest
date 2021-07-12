@@ -8,160 +8,158 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#B6AEAE"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbarLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:background="#B6AEAE"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Quote Signals"
-                    android:textSize="34sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="match_parent"
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Choose the currency pairs"
+                        android:layout_marginTop="16dp"
+                        android:text="Quote Signals"
+                        android:textSize="34sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Choose the currency pairs"
+                            android:textColor="#000000"
+                            android:textSize="18sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipEURUSD"
+                            style="@style/CustomChipChoise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:checked="true"
+                            android:text="EURUSD" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipGBPUSD"
+                            style="@style/CustomChipChoise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="GBPUSD" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipUSDJPY"
+                            style="@style/CustomChipChoise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="USDJPY" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipUSDCHF"
+                            style="@style/CustomChipChoise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="USDCHF" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipUSDCAD"
+                            style="@style/CustomChipChoise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="USDCAD" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAUDUSD"
+                            style="@style/CustomChipChoise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="AUDUSD" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipNZDUSD"
+                            style="@style/CustomChipChoise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="NZDUSD"
+                            app:checkedIconEnabled="false"
+                            app:checkedIconTint="#000000" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <Button
+                        android:id="@+id/startDateTimeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="22.05.2021 25:50:00"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toStartOf="@+id/endDateTimeButton"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Choose the date/time frames"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="@+id/chipGroup"
+                        app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipEURUSD"
-                        style="@style/CustomChipChoise"
+                    <Button
+                        android:id="@+id/endDateTimeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:checked="true"
-                        android:text="EURUSD" />
+                        android:text="27:09:2021 17:19:00"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/startDateTimeButton"
+                        app:layout_constraintTop_toTopOf="@+id/startDateTimeButton" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipGBPUSD"
-                        style="@style/CustomChipChoise"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="GBPUSD" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipUSDJPY"
-                        style="@style/CustomChipChoise"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="USDJPY" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipUSDCHF"
-                        style="@style/CustomChipChoise"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="USDCHF" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipUSDCAD"
-                        style="@style/CustomChipChoise"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="USDCAD" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipAUDUSD"
-                        style="@style/CustomChipChoise"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="AUDUSD" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipNZDUSD"
-                        style="@style/CustomChipChoise"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="NZDUSD"
-                        app:checkedIconEnabled="false"
-                        app:checkedIconTint="#000000" />
-                </com.google.android.material.chip.ChipGroup>
-
-                <Button
-                    android:id="@+id/startDateTimeButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="22.05.2021 25:50:00"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toStartOf="@+id/endDateTimeButton"
-                    app:layout_constraintHorizontal_chainStyle="spread"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Choose the date/time frames"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="@+id/chipGroup"
-                    app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
-
-                <Button
-                    android:id="@+id/endDateTimeButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="27:09:2021 17:19:00"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/startDateTimeButton"
-                    app:layout_constraintTop_toTopOf="@+id/startDateTimeButton" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/quotesRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </androidx.core.widget.NestedScrollView>
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/quotesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

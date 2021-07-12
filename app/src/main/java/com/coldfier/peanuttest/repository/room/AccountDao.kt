@@ -9,7 +9,7 @@ interface AccountDao {
     @Insert
     suspend fun saveAccount(userData: UserData)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateAccount(userData: UserData)
 
     @Query("SELECT * FROM user_data ORDER BY ROWID ASC LIMIT 1")
