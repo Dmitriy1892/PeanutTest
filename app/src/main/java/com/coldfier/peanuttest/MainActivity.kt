@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.coldfier.peanuttest.databinding.ActivityMainBinding
 import com.coldfier.peanuttest.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         repository = AppRepository.getInstance(applicationContext)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        binding.bottomNavigationView.setupWithNavController(navHostFragment.navController)
 
         binding.toolbar.setOnMenuItemClickListener {
             if (it.itemId == R.id.logout) {

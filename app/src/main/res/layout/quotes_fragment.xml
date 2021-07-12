@@ -6,18 +6,19 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/primaryDarkColor">
 
         <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsingToolbarLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#B6AEAE"
+                android:background="@color/primaryLightColor"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +31,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Quote Signals"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="34sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +54,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Choose the currency pairs"
-                            android:textColor="#000000"
+                            android:textColor="@color/primaryTextColor"
                             android:textSize="18sp" />
 
                         <com.google.android.material.chip.Chip
@@ -119,13 +121,16 @@
                         android:id="@+id/startDateTimeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="4dp"
+                        android:backgroundTint="@color/primaryDarkColor"
                         android:text="22.05.2021 25:50:00"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toStartOf="@+id/endDateTimeButton"
                         app:layout_constraintHorizontal_chainStyle="spread"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView2"
+                        tools:ignore="TextContrastCheck" />
 
                     <TextView
                         android:id="@+id/textView6"
@@ -133,7 +138,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Choose the date/time frames"
-                        android:textColor="#000000"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/chipGroup"
                         app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
@@ -142,19 +147,44 @@
                         android:id="@+id/endDateTimeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/primaryDarkColor"
                         android:text="27:09:2021 17:19:00"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/startDateTimeButton"
                         app:layout_constraintTop_toTopOf="@+id/startDateTimeButton" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Start date:"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="@+id/startDateTimeButton"
+                        app:layout_constraintStart_toStartOf="@+id/startDateTimeButton"
+                        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="End date:"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="@+id/endDateTimeButton"
+                        app:layout_constraintStart_toStartOf="@+id/endDateTimeButton"
+                        app:layout_constraintTop_toTopOf="@+id/textView2" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/quotesRecyclerView"
