@@ -36,21 +36,20 @@ class AppRepository private constructor(context: Context) {
     }
 
     suspend fun updateAccount(userData: UserData): Boolean {
+
         return try {
-            val peanutToken = authorizeInPeanut(userData.login, userData.password)
-            val partnerToken = authorizeInPartner(userData.login, userData.password)
-            val updatedUserData = UserData(
-                login = userData.login,
-                password = userData.password,
-                peanutToken = peanutToken,
-                partnerToken = partnerToken
-            )
+            val newPeanutToken = authorizeInPeanut(userData.login, userData.password)
+            val newPartnerToken = authorizeInPartner(userData.login, userData.password)
+            val updatedUserData = userData
+            updatedUserData.peanutToken = newPeanutToken
+            updatedUserData.partnerToken = newPartnerToken
             roomDao.updateAccount(updatedUserData)
             true
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
             false
         }
+
     }
 
     fun getAccountInfo(userData: UserData): AccountInformation? {

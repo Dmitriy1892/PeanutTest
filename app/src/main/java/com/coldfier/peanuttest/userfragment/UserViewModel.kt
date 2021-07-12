@@ -59,11 +59,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     if (repository.updateAccount(userData)) {
                         _userData.postValue(repository.getAccount())
-                        _accountInformation.postValue(repository.getAccountInfo(repository.getAccount()!!))
                     } else {
                         _toastCatcher.postValue(true)
                     }
                 } catch (e: Exception) {
+                    val message = e.message
                     _toastCatcher.postValue(true)
                 }
             }
@@ -75,7 +75,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     if (repository.updateAccount(userData)) {
                         _userData.postValue(repository.getAccount())
-                        _phoneNumber.postValue(repository.getAccountPhoneNumber(repository.getAccount()!!))
                     } else {
                         _toastCatcher.postValue(true)
                     }

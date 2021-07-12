@@ -336,6 +336,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_account_circle"
                 tools:ignore="ImageContrastCheck" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
