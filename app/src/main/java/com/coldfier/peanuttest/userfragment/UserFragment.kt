@@ -27,7 +27,9 @@ class UserFragment : Fragment() {
         ).get(UserViewModel::class.java)
 
         viewModel.accountInformation.observe(viewLifecycleOwner) {
+            if (it.name.isNotBlank()) binding.progressBar.visibility = View.GONE
             binding.accountInformation = it
+
         }
 
         viewModel.phoneNumber.observe(viewLifecycleOwner) {
@@ -48,7 +50,15 @@ class UserFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
                 //TODO: Show the repeat button for getting an account data
+                binding.refreshFAB.show()
+                binding.progressBar.visibility = View.GONE
             }
+        }
+
+        binding.refreshFAB.setOnClickListener {
+            viewModel.userData.value?.let { userData -> viewModel.getAccountInformation(userData, requireContext()) }
+            binding.refreshFAB.hide()
+            binding.progressBar.visibility = View.VISIBLE
         }
 
         //set visible the toolbar logout icon and the bottom navigation menu

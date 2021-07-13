@@ -35,7 +35,10 @@ class SignInViewModel : ViewModel() {
     fun getAccount(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val repository = AppRepository.getInstance(context)
-            val account = repository.getAccount() ?: return@launch
+            val account = repository.getAccount() ?: kotlin.run {
+                _authorizationState.postValue(false)
+                return@launch
+            }
             _authorizationState.postValue(true)
         }
     }

@@ -1,6 +1,7 @@
 package com.coldfier.peanuttest.quotesfragment
 
 import android.annotation.SuppressLint
+import android.icu.util.TimeZone
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -55,7 +56,13 @@ class QuotesFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
                 //TODO: Show the repeat button for getting an account data
+                binding.refreshFAB2.show()
             }
+        }
+
+        binding.refreshFAB2.setOnClickListener {
+            viewModel.getQuoteList()
+            binding.refreshFAB2.hide()
         }
 
         viewModel.userData.observe(viewLifecycleOwner) {
@@ -67,15 +74,15 @@ class QuotesFragment : Fragment() {
         }
 
         viewModel.startDateTime.observe(viewLifecycleOwner) {
-            if (viewModel.quotesList.value != null)viewModel.getQuoteList()
+            if (viewModel.quotesList.value != null) viewModel.getQuoteList()
             binding.startDateTimeButton.text =
-                SimpleDateFormat("dd-MM-yyyy 'at' HH:mm:ss").format(Date(it))
+                    SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss").format(Date(it))
         }
 
         viewModel.endDateTime.observe(viewLifecycleOwner) {
             if (viewModel.quotesList.value != null)viewModel.getQuoteList()
             binding.endDateTimeButton.text =
-                SimpleDateFormat("dd-MM-yyyy 'at' HH:mm:ss").format(Date(it))
+                SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss").format(Date(it))
         }
 
         viewModel.quotesList.observe(viewLifecycleOwner) {
