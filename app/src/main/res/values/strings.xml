@@ -26,4 +26,9 @@
     <string name="quotes_info">Quotes info</string>
     <string name="logout">Logout</string>
     <string name="refresh">Refresh</string>
+    <string name="sign_in_to_peanut">Sign-In to Peanut</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="try_the_demo">Try the demo</string>
 </resources>
