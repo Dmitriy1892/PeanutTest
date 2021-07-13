@@ -11,7 +11,7 @@ import java.util.*
 @BindingAdapter("actualTime")
 fun actualTime(textView: TextView, quoteInfoItem: QuoteInfoItem) {
     val date = Date(quoteInfoItem.actualTime.toLong()*1000)
-    val sdf = SimpleDateFormat("dd-MM-yyyy 'at' HH:mm:ss").format(date)
+    val sdf = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss").format(date)
     textView.text = sdf
 }
 
